@@ -5,7 +5,7 @@
 '''
 
 import sys
-import BitVector
+from BitVector import BitVector
 import binascii
 
 rounds = 10  # 128-bit AES uses 10 rounds
@@ -102,9 +102,9 @@ def key_bv(hex_key):
     ''' HELPER to convert a hex-string representation of a key to the
         equivalent BitVector value '''
     keybytes = binascii.a2b_hex(hex_key)  # hex string to byte string
-    key_bv = BitVector.BitVector(size = 0) # initialize BitVector
+    key_bv = BitVector(size = 0) # initialize BitVector
     for byte in keybytes: 
-	byte_bv = BitVector.BitVector(intVal=ord(byte), size=8) # one byte to add to BitVector
+	byte_bv = BitVector(intVal=ord(byte), size=8) # one byte to add to BitVector
         key_bv += byte_bv # catenate new BitVector byte onto return value
     return key_bv
 
@@ -127,8 +127,7 @@ def init_state_array(bv):
 def sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sbox value corresponding
         to that byte value, returning the sbox value as an 8-bit BitVector.  '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 18-20  
-    pass
+    return BitVector(intVal = sbox[int(input[:4])][int(input[4:])])
 
 def inv_sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sboxinv value corresponding
