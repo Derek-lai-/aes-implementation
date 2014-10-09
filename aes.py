@@ -124,25 +124,6 @@ def init_state_array(bv):
         output.append(col)
     return output
 
-
-def sub_key_bytes(key_word):
-    ''' Iterate through round-key key_word (32-bit BitVector word) performing
-	sbox substitutions, returning the transformed round-key key_word '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
-    pass
-
-def init_key_schedule(key_bv):
-    '''key_bv is the 128-bit input key value represented as a BitVector; return
-       key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
-    pass
-
-def add_round_key(sa, rk):
-    ''' XOR state array sa with roundkey rk to return new state array.
-        param sa is a 4x4 state array, param rk is a 4-word round key '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 40-42  
-    pass
-
 def sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sbox value corresponding
         to that byte value, returning the sbox value as an 8-bit BitVector.  '''
@@ -167,6 +148,13 @@ def inv_sub_bytes(sa):
     # ADD YOUR CODE HERE - SEE LEC SLIDES 18-20   
     pass
 
+
+def sub_key_bytes(key_word):
+    ''' Iterate through round-key key_word (32-bit BitVector word) performing
+	sbox substitutions, returning the transformed round-key key_word '''
+    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
+    pass
+
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
         by num bytes'''
@@ -189,11 +177,23 @@ def inv_shift_rows(sa):
     # ADD YOUR CODE HERE - SEE LEC SLIDES 30-32   
     pass
 
+def add_round_key(sa, rk):
+    ''' XOR state array sa with roundkey rk to return new state array.
+        param sa is a 4x4 state array, param rk is a 4-word round key '''
+    # ADD YOUR CODE HERE - SEE LEC SLIDES 40-42  
+    pass
+
 def gf_mult(bv, factor):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
 	GF(2^8).  param bv is an 8-bit BitVector, param factor is an integer.
         returns an 8-bit BitVector, whose value is bv*factor in GF(2^8) '''
     # ADD YOUR CODE HERE - SEE LEC SLIDES 33-36
+    pass
+
+def init_key_schedule(key_bv):
+    '''key_bv is the 128-bit input key value represented as a BitVector; return
+       key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
+    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
     pass
 
 def mix_columns(sa):
