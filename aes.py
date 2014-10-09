@@ -163,8 +163,7 @@ def shift_bytes_right(bv, num):
 
 def shift_rows(sa):
     ''' shift rows in state array sa to return new state array '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 30-32  
-    pass
+    return [sa[i][i:] + sa[i][:i] for i in xrange(len(sa))]
 
 def inv_shift_rows(sa):
     ''' shift rows on state array sa to return new state array '''
