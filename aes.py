@@ -142,8 +142,7 @@ def sub_bytes(sa):
 def inv_sub_bytes(sa):
     ''' Iterate throught state array sa to perform inv-sbox substitution 
 	returning new state array. '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 18-20   
-    pass
+    return [[inv_sbox_lookup(bv) for bv in bl] for bl in sa]
 
 
 def sub_key_bytes(key_word):
