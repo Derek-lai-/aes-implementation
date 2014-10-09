@@ -166,8 +166,7 @@ def shift_rows(sa):
 
 def inv_shift_rows(sa):
     ''' shift rows on state array sa to return new state array '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 30-32   
-    pass
+    return [sa[i][-i:] + sa[i][:-i] for i in xrange(len(sa))]
 
 def add_round_key(sa, rk):
     ''' XOR state array sa with roundkey rk to return new state array.
