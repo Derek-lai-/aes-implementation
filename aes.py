@@ -154,8 +154,7 @@ def sub_key_bytes(key_word):
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
         by num bytes'''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 30-32   
-    pass
+    return bv << num*8
 
 def shift_bytes_right(bv, num):
     ''' Return the value of BitVector bv after rotating it to the right
