@@ -177,8 +177,21 @@ def gf_mult(bv, factor):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
 	GF(2^8).  param bv is an 8-bit BitVector, param factor is an integer.
         returns an 8-bit BitVector, whose value is bv*factor in GF(2^8) '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 33-36
-    pass
+
+    p = BitVector(intVal=0, size=8)
+    b = BitVector(intVal=factor, size=8)
+    a = bv.deep_copy()
+
+    for i in xrange(8):
+      lobit = b[-1]
+      if lobit:
+        p ^= a
+      hibit = a[0]
+      a.shift_left_by_one()
+      if hibit:
+        a ^= 0x1b
+    return p
+
 
 def init_key_schedule(key_bv):
     '''key_bv is the 128-bit input key value represented as a BitVector; return
