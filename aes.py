@@ -132,8 +132,7 @@ def sbox_lookup(input):
 def inv_sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sboxinv value corresponding
         to that byte, returning the sboxinv value as an 8-bit BitVector. '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 18-20   
-    pass
+    return BitVector(intVal = sboxinv[int(input[:4])][int(input[4:])])
 
 def sub_bytes(sa):
     ''' Iterate throught state array sa to perform sbox substitution 
