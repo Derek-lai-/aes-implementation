@@ -148,8 +148,7 @@ def inv_sub_bytes(sa):
 def sub_key_bytes(key_word):
     ''' Iterate through round-key key_word (32-bit BitVector word) performing
 	sbox substitutions, returning the transformed round-key key_word '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
-    pass
+    return sub_bytes([s.divide_into_two() for s in key_word.divide_into_two()])
 
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
