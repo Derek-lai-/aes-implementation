@@ -154,13 +154,12 @@ def sub_key_bytes(key_word):
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
         by num bytes'''
-    return bv << num*8
+    return bv.deep_copy() << num*8
 
 def shift_bytes_right(bv, num):
     ''' Return the value of BitVector bv after rotating it to the right
         by num bytes'''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 30-32  
-    pass
+    return bv.deep_copy() >> num*8
 
 def shift_rows(sa):
     ''' shift rows in state array sa to return new state array '''
