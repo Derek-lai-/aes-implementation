@@ -173,8 +173,7 @@ def inv_shift_rows(sa):
 def add_round_key(sa, rk):
     ''' XOR state array sa with roundkey rk to return new state array.
         param sa is a 4x4 state array, param rk is a 4-word round key '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 40-42  
-    pass
+    return [[sl[i]^rk[i] for i in xrange(len(sl))]for sl in sa]
 
 def gf_mult(bv, factor):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
