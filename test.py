@@ -44,3 +44,13 @@ class TestBitVector():
                BitVector(bitstring = "11101111100010011010110111001101"))
         assert(shift_bytes_right(BitVector(intVal = 0xFADBADEE, size = 32), 1) == 
                BitVector(bitstring = "11101110111110101101101110101101"))
+
+    def test_gf_mult(self):
+        val_a = (BitVector(intVal = 0xab, size = 8))
+        val_b = (BitVector(intVal = 0xcd, size = 8))
+        val_c = (BitVector(intVal = 0xef, size = 8))
+        val_d = (BitVector(intVal = 0x04, size = 8))
+        val_e = (BitVector(intVal = 0xc5, size = 8))
+        assert(gf_mult(val_a, 0xcd) == val_a.gf_mult(val_b))
+        assert(gf_mult(val_c, 0x04) == val_c.gf_mult(val_d))
+        assert(gf_mult(val_e, 0xab) == val_e.gf_mult(val_a))
