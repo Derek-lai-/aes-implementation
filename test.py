@@ -167,3 +167,16 @@ class TestRound():
         state_array = init_state_array(plaintext)
         state_array = add_round_key(state_array, key_sched[0:4])
         assert(state_str(state_array) == "193de3bea0f4e22b9ac68d2ae9f84808")
+
+class TestCryption():
+    def test_encrypt_one(self):
+        test_key = '2b7e151628aed2a6abf7158809cf4f3c'
+        test_plaintext = '3243f6a8885a308d313198a2e0370734'
+        result = '3925841d02dc09fbdc118597196a0b32'
+        assert(encrypt(test_key, test_plaintext) == result)
+
+    def test_encrypt_two(self):
+        test_plaintext = '3243f6a2315a308acb3198a2e0343213'
+        test_key = '1a2b151242aed2a6abf715abc31f4f3c'
+        result = '8492f7a07e0535b3eb523cf0cce736e2'
+        assert(encrypt(test_key, test_plaintext) == result)
