@@ -2,6 +2,9 @@
 
 ''' Compiler/OS Used: cygwin Win7
     Sources Used: BitVector documentation, NIST AES-spec appendix for tests
+    Authors:
+        William Mak - 998992988
+        Derek Lai - 
 '''
 
 import sys
