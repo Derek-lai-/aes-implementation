@@ -127,12 +127,12 @@ def init_state_array(bv):
 def sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sbox value corresponding
         to that byte value, returning the sbox value as an 8-bit BitVector.  '''
-    return BitVector(intVal = sbox[int(input[:4])][int(input[4:])])
+    return BitVector(intVal = sbox[int(input[:4])][int(input[4:])], size = 8)
 
 def inv_sbox_lookup(input):
     ''' Given an 8-bit BitVector input, look up the sboxinv value corresponding
         to that byte, returning the sboxinv value as an 8-bit BitVector. '''
-    return BitVector(intVal = sboxinv[int(input[:4])][int(input[4:])])
+    return BitVector(intVal = sboxinv[int(input[:4])][int(input[4:])], size = 8)
 
 def sub_bytes(sa):
     ''' Iterate throught state array sa to perform sbox substitution 
@@ -148,7 +148,8 @@ def inv_sub_bytes(sa):
 def sub_key_bytes(key_word):
     ''' Iterate through round-key key_word (32-bit BitVector word) performing
 	sbox substitutions, returning the transformed round-key key_word '''
-    return sub_bytes([s.divide_into_two() for s in key_word.divide_into_two()])
+    return sbox_lookup(key_word[:8]) + sbox_lookup(key_word[8:16]) +\
+           sbox_lookup(key_word[16:24]) + sbox_lookup(key_word[24:32])
 
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
