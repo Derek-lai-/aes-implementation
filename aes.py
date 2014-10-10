@@ -226,10 +226,10 @@ def inv_mix_columns(sa):
     nm = [[]]
     for i in matrix:
       for j in xrange(4):
-        nm[0][j] = gf_mult(i[0], sa[0][j]) ^ gf_mult(i[1],sa[3][j]) ^ gf_mult(i[2],sa[2][j]) ^ gf_mult(i[3],sa[1][j])
-        nm[1][j] = gf_mult(i[0], sa[1][j]) ^ gf_mult(i[1],sa[0][j]) ^ gf_mult(i[2],sa[3][j]) ^ gf_mult(i[3],sa[2][j])
-        nm[2][j] = gf_mult(i[0], sa[2][j]) ^ gf_mult(i[1],sa[1][j]) ^ gf_mult(i[2],sa[0][j]) ^ gf_mult(i[3],sa[3][j])
-        nm[3][j] = gf_mult(i[0], sa[3][j]) ^ gf_mult(i[1],sa[2][j]) ^ gf_mult(i[2],sa[1][j]) ^ gf_mult(i[3],sa[0][j])
+        nm[0][j] = gf_mult(sa[0][j], i[0]) ^ gf_mult(sa[3][j],i[1]) ^ gf_mult(sa[2][j],i[2]) ^ gf_mult(sa[1][j],i[3])
+        nm[1][j] = gf_mult(sa[1][j],i[0]) ^ gf_mult(sa[0][j],i[1]) ^ gf_mult(sa[3][j],i[2]) ^ gf_mult(sa[2][j],i[3])
+        nm[2][j] = gf_mult(sa[2][j],i[0]) ^ gf_mult(sa[1][j],i[1]) ^ gf_mult(sa[0][j],i[2]) ^ gf_mult(sa[3][j],i[3])
+        nm[3][j] = gf_mult(sa[3][j],i[0]) ^ gf_mult(sa[2][j],i[1]) ^ gf_mult(sa[1][j],i[2]) ^ gf_mult(sa[0][j],i[3])
     return nm   
   
 def encrypt(hex_key, hex_plaintext):
