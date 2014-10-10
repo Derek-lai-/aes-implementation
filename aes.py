@@ -201,7 +201,7 @@ def init_key_schedule(key_bv):
       temp = w[-1].shift_left(1)
       w.append(w[i*4]^temp)
       for j in range(3):
-        w.append(w[i*4]^w[i*4 + 1])
+        w.append(w[-1]^w[i*4 + j])
     return w
 
 
