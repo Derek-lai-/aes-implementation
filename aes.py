@@ -199,9 +199,9 @@ def init_key_schedule(key_bv):
        key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
     w = [ key_bv[0:32], key_bv[32:64], key_bv[64:96], key_bv[96:128]]
     for i in range(1, rounds + 1):
-      temp = w[-1].shift_left_by_one()
-      temp = sub_bytes(temp)
-      temp ^= BitVector(size = 8, intVal=(rcon[i] << 24))
+      temp = shift_bytes_left(w[-1], 1)
+      temp = sub_key_bytes(temp)
+      temp ^= BitVector(size = 8, intVal=(rcon[i]))
       w.append(w[-4]^temp)
       for j in range(3):
         w.append(w[-1]^w[-4])
