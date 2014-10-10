@@ -173,22 +173,22 @@ class TestCryption():
         test_key = '2b7e151628aed2a6abf7158809cf4f3c'
         test_plaintext = '3243f6a8885a308d313198a2e0370734'
         result = '3925841d02dc09fbdc118597196a0b32'
-        assert(encrypt(test_key, test_plaintext) == result)
+        assert(encrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
 
     def test_encrypt_two(self):
         test_plaintext = '3243f6a2315a308acb3198a2e0343213'
         test_key = '1a2b151242aed2a6abf715abc31f4f3c'
         result = '8492f7a07e0535b3eb523cf0cce736e2'
-        assert(encrypt(test_key, test_plaintext) == result)
+        assert(encrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
 
     def test_decryption_one(self):
         result = '00112233445566778899aabbccddeeff'
         test_key = '000102030405060708090a0b0c0d0e0f'
         test_plaintext = '69c4e0d86a7b0430d8cdb78070b4c55a'
-        assert(decrypt(test_key, test_plaintext0) == result)
+        assert(decrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
 
     def test_decryption_two(self):
         result = '3243f6a2315a308acb3198a2e0343213'
         test_key = '1a2b151242aed2a6abf715abc31f4f3c'
         test_plaintext = '8492f7a07e0535b3eb523cf0cce736e2'
-        assert(decrypt(test_key, test_plaintext0) == result)
+        assert(decrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
