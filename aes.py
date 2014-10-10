@@ -187,7 +187,7 @@ def gf_mult(bv, factor):
       if lobit:
         p ^= a
       hibit = a[0]
-      a.shift_left(1)
+      a.shift_left_by_one()
       if hibit:
         a ^= 0x1b
     return p
@@ -197,11 +197,13 @@ def init_key_schedule(key_bv):
     '''key_bv is the 128-bit input key value represented as a BitVector; return
        key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
     w = [ key_bv[0:32], key_bv[32:64], key_bv[64:96], key_bv[96:128]]
-    for i in range(rounds):
-      temp = w[-1].shift_left(1)
-      w.append(w[i*4]^temp)
+    for i in range(1, rounds + 1):
+      temp = w[-1].shift_left_by_one()
+      temp = sub_bytes(temp)
+      temp ^= BitVector(size = 8, intVal=(rcon[i] << 24))
+      w.append(w[-4]^temp)
       for j in range(3):
-        w.append(w[-1]^w[i*4 + j])
+        w.append(w[-1]^w[-4])
     return w
 
 
