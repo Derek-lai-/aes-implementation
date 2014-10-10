@@ -69,10 +69,6 @@ class TestStateArray():
         global keys
         global arrays
         global values
-        global spec_key
-        global plaintext
-        spec_key = BitVector(intVal = 0x2b7e151628aed2a6abf7158809cf4f3c, size = 128)
-        plaintext = BitVector(intVal = 0x3243f6a8885a308d313198a2e0370734, size = 128)
         keys = [
             BitVector(intVal = 0xBADFADDABADCD234EBCAF936EFFFE999, size = 128),
             BitVector(intVal = 0x3E9CFF00CBC44EE23927184839289184, size = 128),
@@ -158,8 +154,15 @@ class TestStateArray():
         assert(results == [state_str(add_round_key(arrays[i], values[i])) for i
             in xrange(8)])
 
+class TestRound(): 
+    def setup(self):
+        global spec_key
+        global plaintext
+        spec_key = BitVector(intVal = 0x2b7e151628aed2a6abf7158809cf4f3c, size = 128)
+        plaintext = BitVector(intVal = 0x3243f6a8885a308d313198a2e0370734, size = 128)
+
     @with_setup(setup)
-    def test_init_key_schedule(self):
+    def test_round_one(self):
         key_sched = init_key_schedule(spec_key)
         state_array = init_state_array(plaintext)
         state_array = add_round_key(state_array, key_sched[0:4])
