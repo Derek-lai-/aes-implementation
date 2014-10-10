@@ -66,8 +66,14 @@ class TestBitVector():
 
 class TestStateArray():
     def setup(self):
+        global keys
+        global arrays
         global values
-        values = [
+        global spec_key
+        global plaintext
+        spec_key = BitVector(intVal = 0x2b7e151628aed2a6abf7158809cf4f3c, size = 128)
+        plaintext = BitVector(intVal = 0x3243f6a8885a308d313198a2e0370734, size = 128)
+        keys = [
             BitVector(intVal = 0xBADFADDABADCD234EBCAF936EFFFE999, size = 128),
             BitVector(intVal = 0x3E9CFF00CBC44EE23927184839289184, size = 128),
             BitVector(intVal = 0xABCDEF01234567890ABCDEF123456790, size = 128),
@@ -77,8 +83,7 @@ class TestStateArray():
             BitVector(intVal = 0x3ECBEA83BECDEFEABCE93EACE21BCDE3, size = 128),
             BitVector(intVal = 0xA4BCDE28ADCEDFE291EADCEFEDF92ECD, size = 128),
         ]
-        global arrays
-        arrays = [init_state_array(bv) for bv in values]
+        arrays = [init_state_array(bv) for bv in keys]
         values = [
             BitVector(intVal = 0x3CBE31BC, size = 32),
             BitVector(intVal = 0xBCE3CEBF, size = 32),
@@ -87,6 +92,7 @@ class TestStateArray():
             BitVector(intVal = 0xACB9FEDE, size = 32),
             BitVector(intVal = 0x10EB93EF, size = 32),
             BitVector(intVal = 0x9382EBCE, size = 32),
+            BitVector(intVal = 0x92A4915E, size = 32),
             BitVector(intVal = 0x92A4915E, size = 32),
         ]
     
@@ -151,3 +157,10 @@ class TestStateArray():
                 '36184f763f6a4ebc034e4db17f5dbf93']
         assert(results == [state_str(add_round_key(arrays[i], values[i])) for i
             in xrange(8)])
+
+    @with_setup(setup)
+    def test_init_key_schedule(self):
+        key_sched = init_key_schedule(spec_key)
+        state_array = init_state_array(plaintext)
+        state_array = add_round_key(state_array, key_sched[0:4])
+        assert(state_str(state_array) == "193de3bea0f4e22b9ac68d2ae9f84808")
