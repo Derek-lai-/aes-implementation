@@ -171,7 +171,8 @@ def inv_shift_rows(sa):
 def add_round_key(sa, rk):
     ''' XOR state array sa with roundkey rk to return new state array.
         param sa is a 4x4 state array, param rk is a 4-word round key '''
-    return [[sl[i]^rk[i] for i in xrange(len(sl))]for sl in sa]
+    rkv = [rk[0:8],rk[8:16],rk[16:24],rk[24:32]]
+    return [[sl[i]^rkv[i] for i in range(len(sl))] for sl in sa]
 
 def gf_mult(bv, factor):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
@@ -189,7 +190,7 @@ def gf_mult(bv, factor):
       hibit = a[0]
       a.shift_left_by_one()
       if hibit:
-        a ^= BitVector(intVal= 0x1B, size=8)
+        a ^= BitVector(intVal= 0x10B, size=8)
     return p
 
 
@@ -208,9 +209,19 @@ def init_key_schedule(key_bv):
 
 
 def mix_columns(sa):
-    ''' Mix columns on state array sa to return new state array '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 33-35   
-    pass
+    ''' Mix columns on state array sa to return new state array ''' 
+    matrix = [[2,1,1,3,],[3,2,1,1,],[1,3,2,1],[1,1,3,2]]
+    new_matrix = []
+    for i in matrix:
+      for j in range(0, len(sa)):
+        a = gf_mult(i[0], s[0][0])
+
+
+
+
+
+
+    
 
 def inv_mix_columns(sa):
     ''' Inverse mix columns on state array sa to return new state array '''
