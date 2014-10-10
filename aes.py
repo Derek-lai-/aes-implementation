@@ -148,8 +148,7 @@ def inv_sub_bytes(sa):
 def sub_key_bytes(key_word):
     ''' Iterate through round-key key_word (32-bit BitVector word) performing
 	sbox substitutions, returning the transformed round-key key_word '''
-    return sbox_lookup(key_word[:8]) + sbox_lookup(key_word[8:16]) +\
-           sbox_lookup(key_word[16:24]) + sbox_lookup(key_word[24:32])
+    return sbox_lookup(key_word[:8]) + sbox_lookup(key_word[8:16]) + sbox_lookup(key_word[16:24]) + sbox_lookup(key_word[24:32])
 
 def shift_bytes_left(bv, num):
     ''' Return the value of BitVector bv after rotating it to the left
@@ -188,7 +187,7 @@ def gf_mult(bv, factor):
       if lobit:
         p ^= a
       hibit = a[0]
-      a.shift_left_by_one()
+      a.shift_left(1)
       if hibit:
         a ^= 0x1b
     return p
@@ -197,8 +196,14 @@ def gf_mult(bv, factor):
 def init_key_schedule(key_bv):
     '''key_bv is the 128-bit input key value represented as a BitVector; return
        key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 44-47  
-    pass
+    w = [ key_bv[0:32], key_bv[32:64], key_bv[64:96], key_bv[96:128]]
+    for i in range(rounds):
+      temp = w[-1].shift_left(1)
+      w.append(w[i*4]^temp)
+      for j in range(3):
+        w.append(w[-1]^w[i*4 + j])
+    return w
+
 
 def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array '''
