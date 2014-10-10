@@ -166,7 +166,7 @@ def shift_rows(sa):
 
 def inv_shift_rows(sa):
     ''' shift rows on state array sa to return new state array '''
-    return [sa[i][-i:] + sa[i][:-i] for i in xrange(len(sa))]
+    return [[sa[(i-j)%4][j] for j in xrange(len(sa[i]))] for i in xrange(len(sa))]
 
 def add_round_key(sa, rk):
     ''' XOR state array sa with roundkey rk to return new state array.
@@ -209,7 +209,6 @@ def init_key_schedule(key_bv):
 
 def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array ''' 
-    matrix = [[2,1,1,3,],[3,2,1,1,],[1,3,2,1],[1,1,3,2]]
     nm = [[i for i in xrange(4)] for j in xrange(4)]
     i = [2,1,1,3]
     for j in xrange(4):
@@ -225,14 +224,17 @@ def mix_columns(sa):
 
 def inv_mix_columns(sa):
     ''' Inverse mix columns on state array sa to return new state array '''
-    matrix = [[0x0e, 0x09, 0x0d, 0x0b], [0x0b,0x0e,0x09,0x0d],[0x0d,0x0b,0x0e,0x09],[0x09,0x0d,0x0b,0x0e]]
-    nm = [[]]
-    for i in matrix:
-      for j in xrange(4):
-        nm[0][j] = gf_mult(sa[0][j], i[0]) ^ gf_mult(sa[3][j],i[1]) ^ gf_mult(sa[2][j],i[2]) ^ gf_mult(sa[1][j],i[3])
-        nm[1][j] = gf_mult(sa[1][j],i[0]) ^ gf_mult(sa[0][j],i[1]) ^ gf_mult(sa[3][j],i[2]) ^ gf_mult(sa[2][j],i[3])
-        nm[2][j] = gf_mult(sa[2][j],i[0]) ^ gf_mult(sa[1][j],i[1]) ^ gf_mult(sa[0][j],i[2]) ^ gf_mult(sa[3][j],i[3])
-        nm[3][j] = gf_mult(sa[3][j],i[0]) ^ gf_mult(sa[2][j],i[1]) ^ gf_mult(sa[1][j],i[2]) ^ gf_mult(sa[0][j],i[3])
+    nm = [[i for i in xrange(4)] for j in xrange(4)]
+    i = [0x0e, 0x09, 0x0d, 0x0b]
+    for j in xrange(4):
+        nm[j][0] = gf_mult(sa[j][0],i[0]) ^ gf_mult(sa[j][3],i[1]) ^\
+        gf_mult(sa[j][2],i[2]) ^ gf_mult(sa[j][1],i[3])
+        nm[j][1] = gf_mult(sa[j][1],i[0]) ^ gf_mult(sa[j][0],i[1]) ^\
+        gf_mult(sa[j][3],i[2]) ^ gf_mult(sa[j][2],i[3])
+        nm[j][2] = gf_mult(sa[j][2],i[0]) ^ gf_mult(sa[j][1],i[1]) ^\
+        gf_mult(sa[j][0],i[2]) ^ gf_mult(sa[j][3],i[3])
+        nm[j][3] = gf_mult(sa[j][3],i[0]) ^ gf_mult(sa[j][2],i[1]) ^\
+        gf_mult(sa[j][1],i[2]) ^ gf_mult(sa[j][0],i[3])
     return nm   
   
 def encrypt(hex_key, hex_plaintext):
@@ -242,7 +244,7 @@ def encrypt(hex_key, hex_plaintext):
     key_sched = init_key_schedule(hex_key)
     state_array = init_state_array(hex_plaintext)
     state_array = add_round_key(state_array, key_sched[0:4])
-    for i in xrange(0, 1):
+    for i in xrange(0, rounds):
         state_array = sub_bytes(state_array)
         state_array = shift_rows(state_array)
         state_array = mix_columns(state_array)
@@ -252,6 +254,16 @@ def encrypt(hex_key, hex_plaintext):
 def decrypt(hex_key, hex_ciphertext):
     ''' perform AES decryption using 128-bit hex_key on 128-bit ciphertext
         hex_ciphertext, where both key and ciphertext values are expressed
-  in hexadecimal string notation. '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 14-15
-    pass
+        in hexadecimal string notation. '''
+    key_sched = init_key_schedule(hex_key)
+    state_array = init_state_array(hex_ciphertext)
+    state_array = add_round_key(state_array,
+            key_sched[-4:])
+    for i in xrange(0,rounds):
+        state_array = inv_mix_columns(state_array)
+        state_array = inv_shift_rows(state_array)
+        state_array = inv_sub_bytes(state_array)
+        state_array = add_round_key(state_array,
+                key_sched[-((i+2)*4):-(((i+1)*4))])
+    return state_str(state_array)
+
