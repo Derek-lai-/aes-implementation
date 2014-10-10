@@ -247,7 +247,8 @@ def encrypt(hex_key, hex_plaintext):
         state_array = sub_bytes(state_array)
         state_array = shift_rows(state_array)
         state_array = mix_columns(state_array)
-        print state_str(state_array)
+        state_array = add_round_key(state_array, key_sched[(i+1)*4:(i+2)*4])
+    return state_str(state_array)
 
 def decrypt(hex_key, hex_ciphertext):
     ''' perform AES decryption using 128-bit hex_key on 128-bit ciphertext
