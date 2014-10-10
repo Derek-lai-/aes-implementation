@@ -184,7 +184,7 @@ def gf_mult(bv, factor):
     a = bv.deep_copy()
 
     for i in xrange(8):
-      lobit = b[-1]
+      lobit = b[-(i+1)]
       if lobit:
         p ^= a
       hibit = a[0]
