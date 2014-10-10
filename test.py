@@ -185,10 +185,10 @@ class TestCryption():
         result = '00112233445566778899aabbccddeeff'
         test_key = '000102030405060708090a0b0c0d0e0f'
         test_plaintext = '69c4e0d86a7b0430d8cdb78070b4c55a'
-        assert(decrypt(key_bv(test_key), key_bv(test_plaintext) == result)
+        assert(decrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
 
     def test_decryption_two(self):
         result = '3243f6a2315a308acb3198a2e0343213'
         test_key = '1a2b151242aed2a6abf715abc31f4f3c'
         test_plaintext = '8492f7a07e0535b3eb523cf0cce736e2'
-        assert(decrypt(key_bv(test_key), key_bv(test_plaintext) == result)
+        assert(decrypt(key_bv(test_key), key_bv(test_plaintext)) == result)
