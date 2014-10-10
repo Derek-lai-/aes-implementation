@@ -212,12 +212,16 @@ def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array ''' 
     matrix = [[2,1,1,3,],[3,2,1,1,],[1,3,2,1],[1,1,3,2]]
     nm = [[i for i in xrange(4)] for j in xrange(4)]
-    for i in matrix:
-      for j in xrange(4):
-        nm[0][j] = gf_mult(sa[0][j], i[0]) ^ gf_mult(sa[3][j],i[1]) ^ gf_mult(sa[2][j],i[2]) ^ gf_mult(sa[1][j],i[3])
-        nm[1][j] = gf_mult(sa[1][j],i[0]) ^ gf_mult(sa[0][j],i[1]) ^ gf_mult(sa[3][j],i[2]) ^ gf_mult(sa[2][j],i[3])
-        nm[2][j] = gf_mult(sa[2][j],i[0]) ^ gf_mult(sa[1][j],i[1]) ^ gf_mult(sa[0][j],i[2]) ^ gf_mult(sa[3][j],i[3])
-        nm[3][j] = gf_mult(sa[3][j],i[0]) ^ gf_mult(sa[2][j],i[1]) ^ gf_mult(sa[1][j],i[2]) ^ gf_mult(sa[0][j],i[3])
+    i = [2,1,1,3]
+    for j in xrange(4):
+        nm[j][0] = gf_mult(sa[j][0],i[0]) ^ gf_mult(sa[j][3],i[1]) ^\
+        gf_mult(sa[j][2],i[2]) ^ gf_mult(sa[j][1],i[3])
+        nm[j][1] = gf_mult(sa[j][1],i[0]) ^ gf_mult(sa[j][0],i[1]) ^\
+        gf_mult(sa[j][3],i[2]) ^ gf_mult(sa[j][2],i[3])
+        nm[j][2] = gf_mult(sa[j][2],i[0]) ^ gf_mult(sa[j][1],i[1]) ^\
+        gf_mult(sa[j][0],i[2]) ^ gf_mult(sa[j][3],i[3])
+        nm[j][3] = gf_mult(sa[j][3],i[0]) ^ gf_mult(sa[j][2],i[1]) ^\
+        gf_mult(sa[j][1],i[2]) ^ gf_mult(sa[j][0],i[3])
     return nm   
 
 def inv_mix_columns(sa):
