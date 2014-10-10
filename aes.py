@@ -174,7 +174,7 @@ def add_round_key(sa, rk):
     rkv = [[r[:8], r[8:16], r[16:24], r[24:32]] for r in rk]
     return [[sa[i][j]^rkv[i][j] for j in range(len(sa[i]))] for i in xrange(len(sa))]
 
-def gf_mult(factor, bv):
+def gf_mult(bv, factor):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
   GF(2^8).  param bv is an 8-bit BitVector, param factor is an integer.
         returns an 8-bit BitVector, whose value is bv*factor in GF(2^8) '''
