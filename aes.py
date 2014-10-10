@@ -162,7 +162,7 @@ def shift_bytes_right(bv, num):
 
 def shift_rows(sa):
     ''' shift rows in state array sa to return new state array '''
-    return [sa[i][i:] + sa[i][:i] for i in xrange(len(sa))]
+    return [[sa[(i+j)%4][j] for j in xrange(len(sa[i]))] for i in xrange(len(sa))]
 
 def inv_shift_rows(sa):
     ''' shift rows on state array sa to return new state array '''
@@ -236,14 +236,13 @@ def encrypt(hex_key, hex_plaintext):
     ''' perform AES encryption using 128-bit hex_key on 128-bit plaintext 
         hex_plaintext, where both key and plaintext values are expressed
   in hexadecimal string notation. '''
-    output = [0] * 16
-    block = [0] * 16
-    expkeysize = 16*11
-    for i in range(4):
-      for j in range(4):
-        block[(i+(j*4))] = input[(i*4)+j]
-
-    pass
+    key_sched = init_key_schedule(hex_key)
+    state_array = init_state_array(hex_plaintext)
+    state_array = add_round_key(state_array, key_sched[0:4])
+    for i in xrange(0, 1):
+        state_array = sub_bytes(state_array)
+        state_array = shift_rows(state_array)
+        print state_str(state_array)
 
 def decrypt(hex_key, hex_ciphertext):
     ''' perform AES decryption using 128-bit hex_key on 128-bit ciphertext
