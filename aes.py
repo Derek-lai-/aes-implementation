@@ -249,8 +249,8 @@ def encrypt(hex_key, hex_plaintext):
     ''' perform AES encryption using 128-bit hex_key on 128-bit plaintext 
         hex_plaintext, where both key and plaintext values are expressed
   in hexadecimal string notation. '''
-    key_sched = init_key_schedule(hex_key)
-    state_array = init_state_array(hex_plaintext)
+    key_sched = init_key_schedule(key_bv(hex_key))
+    state_array = init_state_array(key_bv(hex_plaintext))
     state_array = add_round_key(state_array, key_sched[0:4])
     for i in xrange(0, rounds-1):
         state_array = sub_bytes(state_array)
@@ -266,11 +266,15 @@ def decrypt(hex_key, hex_ciphertext):
     ''' perform AES decryption using 128-bit hex_key on 128-bit ciphertext
         hex_ciphertext, where both key and ciphertext values are expressed
         in hexadecimal string notation. '''
-    key_sched = init_key_schedule(hex_key)
-    state_array = init_state_array(hex_ciphertext)
+    key_sched = init_key_schedule(key_bv(hex_key))
+    state_array = init_state_array(key_bv(hex_ciphertext))
     state_array = add_round_key(state_array,
             key_sched[-4:])
-    for i in xrange(0,rounds):
+    state_array = inv_shift_rows(state_array)
+    state_array = inv_sub_bytes(state_array)
+    state_array = add_round_key(state_array,
+            key_sched[-8:-4])
+    for i in xrange(1,rounds):
         state_array = inv_mix_columns(state_array)
         state_array = inv_shift_rows(state_array)
         state_array = inv_sub_bytes(state_array)
