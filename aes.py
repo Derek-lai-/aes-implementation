@@ -197,15 +197,14 @@ def gf_mult(bv, factor):
 def init_key_schedule(key_bv):
     '''key_bv is the 128-bit input key value represented as a BitVector; return
        key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
-    w = [ key_bv[0:32], key_bv[32:64], key_bv[64:96], key_bv[96:128]]
-    for i in range(1, rounds + 1):
-      temp = shift_bytes_left(w[-1], 1)
-      temp = sub_key_bytes(temp)
-      temp ^= BitVector(size = 8, intVal=(rcon[i]))
-      w.append(w[-4]^temp)
-      for j in range(3):
-        w.append(w[-1]^w[-4])
-    return w
+    round_key = [key_bv[i:i+32] for i in range(0, len(key_bv), 32)]
+    for r_cond in rcon[1:rounds + 1]:
+      gen = sub_key_bytes(shift_bytes_left(round_key[-1],1))
+      gen[0:8] ^= BitVector(size=8, intVal=r_cond)
+      for r_key in round_key[-4:]:
+        gen ^= r_key
+        round_key.append(gen)
+    return round_key
 
 
 def mix_columns(sa):
