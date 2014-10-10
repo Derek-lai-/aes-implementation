@@ -179,7 +179,7 @@ def gf_mult(bv, factor):
         returns an 8-bit BitVector, whose value is bv*factor in GF(2^8) '''
 
     p = BitVector(intVal=0, size=8)
-    b = BitVector(intVal=factor, size=8)
+    b = BitVector(intVal= factor, size=8)
     a = bv.deep_copy()
 
     for i in xrange(8):
@@ -189,7 +189,7 @@ def gf_mult(bv, factor):
       hibit = a[0]
       a.shift_left_by_one()
       if hibit:
-        a ^= 0x1b
+        a ^= BitVector(intVal= 0x1B, size=8)
     return p
 
 
