@@ -174,7 +174,7 @@ def add_round_key(sa, rk):
     rkv = [[r[:8], r[8:16], r[16:24], r[24:32]] for r in rk]
     return [[sa[i][j]^rkv[i][j] for j in range(len(sa[i]))] for i in xrange(len(sa))]
 
-def gf_mult(bv, factor):
+def gf_mult(factor, bv):
     ''' Used by mix_columns and inv_mix_columns to perform multiplication in
   GF(2^8).  param bv is an 8-bit BitVector, param factor is an integer.
         returns an 8-bit BitVector, whose value is bv*factor in GF(2^8) '''
@@ -211,7 +211,7 @@ def init_key_schedule(key_bv):
 def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array ''' 
     matrix = [[2,1,1,3,],[3,2,1,1,],[1,3,2,1],[1,1,3,2]]
-    nm = [[]]
+    nm = [[i for i in xrange(4)] for j in xrange(4)]
     for i in matrix:
       for j in xrange(4):
         nm[0][j] = gf_mult(i[0], sa[0][j]) ^ gf_mult(i[1],sa[3][j]) ^ gf_mult(i[2],sa[2][j]) ^ gf_mult(i[3],sa[1][j])
@@ -242,6 +242,7 @@ def encrypt(hex_key, hex_plaintext):
     for i in xrange(0, 1):
         state_array = sub_bytes(state_array)
         state_array = shift_rows(state_array)
+        state_array = mix_columns(state_array)
         print state_str(state_array)
 
 def decrypt(hex_key, hex_ciphertext):
