@@ -2,6 +2,9 @@
 
 ''' Compiler/OS Used: cygwin Win7
     Sources Used: BitVector documentation, NIST AES-spec appendix for tests
+    Authors:
+        William Mak - 998992988
+        Derek Lai - 
 '''
 
 import sys
@@ -201,15 +204,21 @@ def gf_mult(bv, factor):
 def init_key_schedule(key_bv):
     '''key_bv is the 128-bit input key value represented as a BitVector; return
        key_schedule as an array of (4*(1+#rounds)) 32-bit BitVector words '''
-    round_key = [key_bv[i:i+32] for i in range(0, len(key_bv), 32)]
-    for r_cond in rcon[1:rounds + 1]:
-      gen = sub_key_bytes(shift_bytes_left(round_key[-1],1))
-      gen[0:8] ^= BitVector(size=8, intVal=r_cond)
-      for r_key in round_key[-4:]:
-        gen ^= r_key
-        round_key.append(gen)
-    return round_key
 
+    round_key = [key_bv[i: i+32] for i in range(0, len(key_bv), 32)]
+    for r_cond in rcon[1:rounds + 1]:
+        gen = sub_key_bytes(shift_bytes_left(round_key[-1], 1))
+
+        # XOR first byte with the rcon value for this round
+        gen[0:8] ^= BitVector(size=8, intVal=r_cond)
+
+        # XOR the last word with the corresponding word of the previous sub_key
+        # will add three extra words
+        for r_key in round_key[-4:]:
+            gen ^= r_key
+            round_key.append(gen)
+
+    return round_key
 
 def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array ''' 
@@ -245,25 +254,32 @@ def encrypt(hex_key, hex_plaintext):
     ''' perform AES encryption using 128-bit hex_key on 128-bit plaintext 
         hex_plaintext, where both key and plaintext values are expressed
   in hexadecimal string notation. '''
-    key_sched = init_key_schedule(hex_key)
-    state_array = init_state_array(hex_plaintext)
+    key_sched = init_key_schedule(key_bv(hex_key))
+    state_array = init_state_array(key_bv(hex_plaintext))
     state_array = add_round_key(state_array, key_sched[0:4])
-    for i in xrange(0, 1):
+    for i in xrange(0, rounds-1):
         state_array = sub_bytes(state_array)
         state_array = shift_rows(state_array)
         state_array = mix_columns(state_array)
         state_array = add_round_key(state_array, key_sched[(i+1)*4:(i+2)*4])
+    state_array = sub_bytes(state_array)
+    state_array = shift_rows(state_array)
+    state_array = add_round_key(state_array, key_sched[(i+2)*4:(i+3)*4])
     return state_str(state_array)
 
 def decrypt(hex_key, hex_ciphertext):
     ''' perform AES decryption using 128-bit hex_key on 128-bit ciphertext
         hex_ciphertext, where both key and ciphertext values are expressed
         in hexadecimal string notation. '''
-    key_sched = init_key_schedule(hex_key)
-    state_array = init_state_array(hex_ciphertext)
+    key_sched = init_key_schedule(key_bv(hex_key))
+    state_array = init_state_array(key_bv(hex_ciphertext))
     state_array = add_round_key(state_array,
             key_sched[-4:])
-    for i in xrange(0,rounds):
+    state_array = inv_shift_rows(state_array)
+    state_array = inv_sub_bytes(state_array)
+    state_array = add_round_key(state_array,
+            key_sched[-8:-4])
+    for i in xrange(1,rounds):
         state_array = inv_mix_columns(state_array)
         state_array = inv_shift_rows(state_array)
         state_array = inv_sub_bytes(state_array)
