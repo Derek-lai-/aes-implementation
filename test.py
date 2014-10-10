@@ -28,3 +28,7 @@ class TestBitVector():
                 BitVector(bitstring = "10100111011000101011110111011111"))
         assert(sub_key_bytes(BitVector(intVal = 0xFADBADEE, size = 32)) == 
                 BitVector(bitstring = "00101101101110011001010100101000"))
+
+    def test_shift_bytes_left(self):
+        assert(shift_bytes_left(BitVector(intVal = 0x01234567, size = 32), 1) == 
+                BitVector(bitstring = "00100011010001010110011100000001"))
