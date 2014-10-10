@@ -60,6 +60,94 @@ class TestBitVector():
 
     @with_setup(setup)
     def test_gf_mult(self):
-        assert(gf_mult(values[0], 0xcd) == BitVector(intVal = 0xBB, size = 8))
-        assert(gf_mult(values[1], 0x3e) == BitVector(intVal = 0x06, size = 8))
-        assert(gf_mult(values[2], 0xa4) == BitVector(intVal = 0xA8, size = 8))
+        assert(gf_mult(values[0], 0xCD) == BitVector(intVal = 0xBB, size = 8))
+        assert(gf_mult(values[1], 0x3E) == BitVector(intVal = 0x06, size = 8))
+        assert(gf_mult(values[2], 0xA4) == BitVector(intVal = 0xA8, size = 8))
+
+class TestStateArray():
+    def setup(self):
+        global values
+        values = [
+            BitVector(intVal = 0xBADFADDABADCD234EBCAF936EFFFE999, size = 128),
+            BitVector(intVal = 0x3E9CFF00CBC44EE23927184839289184, size = 128),
+            BitVector(intVal = 0xABCDEF01234567890ABCDEF123456790, size = 128),
+            BitVector(intVal = 0x01234567247128947BCDEFABECCEEFF2, size = 128),
+            BitVector(intVal = 0x89ABCDEFBEDEBEEDEEFADDAF92318002, size = 128),
+            BitVector(intVal = 0xFADBADEE3482EABCFEBBCEFA8921EC83, size = 128),
+            BitVector(intVal = 0x3ECBEA83BECDEFEABCE93EACE21BCDE3, size = 128),
+            BitVector(intVal = 0xA4BCDE28ADCEDFE291EADCEFEDF92ECD, size = 128),
+        ]
+        global arrays
+        arrays = [init_state_array(bv) for bv in values]
+        values = [
+            BitVector(intVal = 0x3CBE31BC, size = 32),
+            BitVector(intVal = 0xBCE3CEBF, size = 32),
+            BitVector(intVal = 0xA82BEC09, size = 32),
+            BitVector(intVal = 0xBAC92FEB, size = 32),
+            BitVector(intVal = 0xACB9FEDE, size = 32),
+            BitVector(intVal = 0x10EB93EF, size = 32),
+            BitVector(intVal = 0x9382EBCE, size = 32),
+            BitVector(intVal = 0x92A4915E, size = 32),
+        ]
+    
+    @with_setup(setup)
+    def test_sub_bytes(self):
+        results = ['f49e9557f486b518e9749905df161eee',
+                'b2de16631f1c2f9812ccad521234815f',
+                '62bddf7c266e85a767651da1266e8560',
+                '7c266e8536a3342221bddf62ce8bdf89',
+                'a762bddfae1dae55282dc1794fc7cd77',
+                '2db9952818138765bbea8b2da7fdceec',
+                'b21f87ecaebddf87651eb29198afbd11',
+                '49651d34958b9e98818786df559931bd']
+        assert(results == [state_str(sub_bytes(array)) for array in arrays])
+
+    @with_setup(setup)
+    def test_inv_sub_bytes(self):
+        results = ['c0ef187ac0937f283c106924617debf9',
+                'd11c7d525988b63b5b3d34d45beeac4f',
+                '0e80610932680af2a3789c2b32680a96',
+                '0932680aa62ceee70380610e83ec6104',
+                'f20e80615a9c5a539914c91b742e3a6a',
+                '149f18992811bb780cfeec14f27b8341',
+                'd159bb415a8061bb78ebd1aa3b44804d',
+                '1d789cee18ecef3bacbb93615369c380']
+        assert(results == [state_str(inv_sub_bytes(array)) for array in arrays])
+
+    @with_setup(setup)
+    def test_shift_rows(self):
+        results = ['badfaddadcd234baf936ebca99efffe9',
+                '3e9cff00c44ee2cb1848392784392891',
+                'abcdef0145678923def10abc90234567',
+                '0123456771289424efab7bcdf2ecceef',
+                '89abcdefdebeedbeddafeefa02923180',
+                'fadbadee82eabc34cefafebb838921ec',
+                '3ecbea83cdefeabe3eacbce9e3e21bcd',
+                'a4bcde28cedfe2addcef91eacdedf92e']
+        assert(results == [state_str(shift_rows(array)) for array in arrays])
+
+    @with_setup(setup)
+    def test_inv_shift_rows(self):
+        results = ['badfadda34badcd2f936ebcaffe999ef',
+                '3e9cff00e2cbc44e1848392728918439',
+                'abcdef0189234567def10abc45679023',
+                '0123456794247128efab7bcdceeff2ec',
+                '89abcdefedbedebeddafeefa31800292',
+                'fadbadeebc3482eacefafebb21ec8389',
+                '3ecbea83eabecdef3eacbce91bcde3e2',
+                'a4bcde28e2adcedfdcef91eaf92ecded']
+        assert(results == [state_str(inv_shift_rows(array)) for array in
+            arrays])
+
+    @with_setup(setup)
+    def test_add_round_key(self):
+        results = ['86619c668662e388d774c88ad341d825',
+                '827f31bf7727805d85c4d6f785cb5f3b',
+                '03e603088b6e8b80a29732f88b6e8b99',
+                'bbea6a8c9eb8077fc104c0405607c019',
+                '2512333112674033424323713e887edc',
+                'ea303e0124697953ee505d1599ca7f6c',
+                'ad49014d2d4f04242f6bd5627199262d',
+                '36184f763f6a4ebc034e4db17f5dbf93']
+        assert(results == [state_str(add_round_key(arrays[i], values[i])) for i
+            in xrange(8)])
