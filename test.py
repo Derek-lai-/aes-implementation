@@ -36,3 +36,11 @@ class TestBitVector():
                BitVector(bitstring = "10101101110011011110111110001001"))
         assert(shift_bytes_left(BitVector(intVal = 0xFADBADEE, size = 32), 1) == 
                BitVector(bitstring = "11011011101011011110111011111010"))
+
+    def test_shift_bytes_right(self):
+        assert(shift_bytes_right(BitVector(intVal = 0x01234567, size = 32), 1) == 
+               BitVector(bitstring = "01100111000000010010001101000101"))
+        assert(shift_bytes_right(BitVector(intVal = 0x89ADCDEF, size = 32), 1) == 
+               BitVector(bitstring = "11101111100010011010110111001101"))
+        assert(shift_bytes_right(BitVector(intVal = 0xFADBADEE, size = 32), 1) == 
+               BitVector(bitstring = "11101110111110101101101110101101"))
