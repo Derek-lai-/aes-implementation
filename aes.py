@@ -211,17 +211,14 @@ def init_key_schedule(key_bv):
 def mix_columns(sa):
     ''' Mix columns on state array sa to return new state array ''' 
     matrix = [[2,1,1,3,],[3,2,1,1,],[1,3,2,1],[1,1,3,2]]
-    new_matrix = []
+    nm = [[]]
     for i in matrix:
-      for j in range(0, len(sa)):
-        a = gf_mult(i[0], s[0][0])
-
-
-
-
-
-
-    
+      for j in xrange(4):
+        nm[0][j] = gf_mult(i[0], sa[0][j]) ^ gf_mult(i[1],sa[3][j]) ^ gf_mult(i[2],sa[2][j]) ^ gf_mult(i[3],sa[1][j])
+        nm[1][j] = gf_mult(i[0], sa[1][j]) ^ gf_mult(i[1],sa[0][j]) ^ gf_mult(i[2],sa[3][j]) ^ gf_mult(i[3],sa[2][j])
+        nm[2][j] = gf_mult(i[0], sa[2][j]) ^ gf_mult(i[1],sa[1][j]) ^ gf_mult(i[2],sa[0][j]) ^ gf_mult(i[3],sa[3][j])
+        nm[3][j] = gf_mult(i[0], sa[3][j]) ^ gf_mult(i[1],sa[2][j]) ^ gf_mult(i[2],sa[1][j]) ^ gf_mult(i[3],sa[0][j])
+    return nm   
 
 def inv_mix_columns(sa):
     ''' Inverse mix columns on state array sa to return new state array '''
