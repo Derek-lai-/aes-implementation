@@ -171,7 +171,7 @@ def inv_shift_rows(sa):
 def add_round_key(sa, rk):
     ''' XOR state array sa with roundkey rk to return new state array.
         param sa is a 4x4 state array, param rk is a 4-word round key '''
-    rkv = [rk[0:8],rk[8:16],rk[16:24],rk[24:32]]
+    rkv = [rk[0:4],rk[4:8],rk[8:12],rk[12:16]]
     return [[sl[i]^rkv[i] for i in range(len(sl))] for sl in sa]
 
 def gf_mult(bv, factor):
@@ -236,7 +236,13 @@ def encrypt(hex_key, hex_plaintext):
     ''' perform AES encryption using 128-bit hex_key on 128-bit plaintext 
         hex_plaintext, where both key and plaintext values are expressed
   in hexadecimal string notation. '''
-    # ADD YOUR CODE HERE - SEE LEC SLIDES 14-15
+    output = [0] * 16
+    block = [0] * 16
+    expkeysize = 16*11
+    for i in range(4):
+      for j in range(4):
+        block[(i+(j*4))] = input[(i*4)+j]
+
     pass
 
 def decrypt(hex_key, hex_ciphertext):
