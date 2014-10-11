@@ -207,13 +207,13 @@ def init_key_schedule(key_bv):
 
     round_key = [key_bv[i: i+32] for i in range(0, len(key_bv), 32)]
     for r_cond in rcon[1:rounds + 1]:
-        gen = sub_key_bytes(shift_bytes_left(round_key[-1], 1))
+        x = sub_key_bytes(shift_bytes_left(round_key[-1], 1))
 
-        gen[0:8] ^= BitVector(size=8, intVal=r_cond)
+        x[0:8] ^= BitVector(size=8, intVal=r_cond)
 
         for r_key in round_key[-4:]:
-            gen ^= r_key
-            round_key.append(gen)
+            x ^= r_key
+            round_key.append(x)
 
     return round_key
 
