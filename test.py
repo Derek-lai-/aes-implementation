@@ -118,41 +118,40 @@ class TestStateArray():
 
     @with_setup(setup)
     def test_shift_rows(self):
-        results = ['badfaddadcd234baf936ebca99efffe9',
-                '3e9cff00c44ee2cb1848392784392891',
-                'abcdef0145678923def10abc90234567',
-                '0123456771289424efab7bcdf2ecceef',
-                '89abcdefdebeedbeddafeefa02923180',
-                'fadbadee82eabc34cefafebb838921ec',
-                '3ecbea83cdefeabe3eacbce9e3e21bcd',
-                'a4bcde28cedfe2addcef91eacdedf92e']
+        results = ['badcf999bacae9daebffad34efdfd236', 
+                '3ec41884cb2791003928ffe2399c4e48', 
+                'ab45de9023bc67010a45ef8923cd67f1', 
+                '0171eff224cdef677bce4594ec2328ab', 
+                '89dedd02befa80efee31cded92abbeaf', 
+                'fa82ce8334bbeceefe21adbc89dbeafa', 
+                '3ecd3ee3bee9cd83bc1beaeae2cbefac', 
+                'a4cedccdadea2e2891f9dee2edbcdfef']
+
         assert(results == [state_str(shift_rows(array)) for array in arrays])
 
     @with_setup(setup)
     def test_inv_shift_rows(self):
-        results = ['badfadda34badcd2f936ebcaffe999ef',
-                '3e9cff00e2cbc44e1848392728918439',
-                'abcdef0189234567def10abc45679023',
-                '0123456794247128efab7bcdceeff2ec',
-                '89abcdefedbedebeddafeefa31800292',
-                'fadbadeebc3482eacefafebb21ec8389',
-                '3ecbea83eabecdef3eacbce91bcde3e2',
-                'a4bcde28e2adcedfdcef91eaf92ecded']
-        assert(results == [state_str(inv_shift_rows(array)) for array in
-            arrays])
+        results = ['bafff934badfe936ebdcad99efcad2da',
+                '3e2818e2cb9c914839c4ff8439274e00',
+                'ab45de8923cd67f10a45ef9023bc6701',
+                '01ceef942423efab7b7145f2eccd2867',
+                '8931ddedbeab80afeedecd0292fabeef',
+                'fa21cebc34dbecfafe82ad8389bbeaee',
+                '3e1b3eeabecbcdacbccdeae3e2e9ef83',
+                'a4f9dce2adbc2eef91cedecdedeadf28']
+
+        assert(results == [state_str(inv_shift_rows(array)) for array in arrays])
 
     @with_setup(setup)
     def test_add_round_key(self):
-        results = ['86619c668662e388d774c88ad341d825',
-                '827f31bf7727805d85c4d6f785cb5f3b',
-                '03e603088b6e8b80a29732f88b6e8b99',
-                'bbea6a8c9eb8077fc104c0405607c019',
-                '2512333112674033424323713e887edc',
-                'ea303e0124697953ee505d1599ca7f6c',
-                'ad49014d2d4f04242f6bd5627199262d',
-                '36184f763f6a4ebc034e4db17f5dbf93']
-        assert(results == [state_str(add_round_key(arrays[i], values[i])) for i
-            in xrange(8)])
+
+        v = 'e9f74eec023020f61bf2ccf2353c21c7'
+        k = '000102030405060708090a0b0c0d0e0f'
+        s = '549932d1f08557681093ed9cbe2c974e'
+        ss = init_state_array(key_bv(s))
+        assert(v == state_str(add_round_key(ss, k)))
+
+        '''assert(results == [state_str(add_round_key(arrays[i], values[i])) for i in xrange(8)])'''
 
 class TestRound(): 
     def setup(self):

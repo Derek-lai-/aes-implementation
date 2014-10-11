@@ -4,7 +4,7 @@
     Sources Used: BitVector documentation, NIST AES-spec appendix for tests
     Authors:
         William Mak - 998992988
-        Derek Lai - 
+        Derek Lai - 999035020
 '''
 
 import sys
@@ -209,11 +209,8 @@ def init_key_schedule(key_bv):
     for r_cond in rcon[1:rounds + 1]:
         gen = sub_key_bytes(shift_bytes_left(round_key[-1], 1))
 
-        # XOR first byte with the rcon value for this round
         gen[0:8] ^= BitVector(size=8, intVal=r_cond)
 
-        # XOR the last word with the corresponding word of the previous sub_key
-        # will add three extra words
         for r_key in round_key[-4:]:
             gen ^= r_key
             round_key.append(gen)
