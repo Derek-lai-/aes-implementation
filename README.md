@@ -1,2 +1,2 @@
-# D27 implementation of AES
+#implementation of AES
 Yeah, that's about it.
